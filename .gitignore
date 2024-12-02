@@ -1,2 +1,7 @@
 datasets
 processed_data
+*.csv
+*.json
+*.pt
+*.bin
+*.pth
