@@ -107,8 +107,6 @@
 
 ## 04-使用Transformers库进行文本分类
 
-
-
 1. **数据加载与清理**
    - 使用Pandas读取CSV文件并清理掉含有缺失值的数据条目，确保数据集的完整性和一致性。
 
@@ -130,6 +128,17 @@
 6. **模型预测和pipeline**
    - 最后演示了如何利用训练好的模型对新句子进行情感分类预测，同时提供了批量化预测的方法。
 
+## 05-Datasets的使用
+   - 包含加载在线数据集 load_dataset
+   - 加载数据集某项任务 load_dataset
+   - 按照数据集划分进行加载 load_dataset
+   - 查看数据集 index and slice
+   - 数据集划分 train_test_split
+   - 数据选取与过滤 select and filter
+   - 数据映射 map
+   - 保存与加载 save_to_disk / load_from_disk
+
+   
 
 
 ---

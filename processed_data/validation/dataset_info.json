@@ -1,0 +1,72 @@
+{
+  "builder_name": "csv",
+  "citation": "",
+  "config_name": "default",
+  "dataset_name": "new-title-chinese",
+  "dataset_size": 29149888,
+  "description": "",
+  "download_checksums": {
+    "hf://datasets/madao33/new-title-chinese@be61f6e55257d64aa16e6a5c09ef9451e3f24c40/train.csv": {
+      "num_bytes": 22632222,
+      "checksum": null
+    },
+    "hf://datasets/madao33/new-title-chinese@be61f6e55257d64aa16e6a5c09ef9451e3f24c40/dev.csv": {
+      "num_bytes": 6493422,
+      "checksum": null
+    }
+  },
+  "download_size": 29125644,
+  "features": {
+    "input_ids": {
+      "feature": {
+        "dtype": "int32",
+        "_type": "Value"
+      },
+      "_type": "Sequence"
+    },
+    "token_type_ids": {
+      "feature": {
+        "dtype": "int8",
+        "_type": "Value"
+      },
+      "_type": "Sequence"
+    },
+    "attention_mask": {
+      "feature": {
+        "dtype": "int8",
+        "_type": "Value"
+      },
+      "_type": "Sequence"
+    },
+    "labels": {
+      "feature": {
+        "dtype": "int64",
+        "_type": "Value"
+      },
+      "_type": "Sequence"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 58275532,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 22649764,
+      "num_examples": 5850,
+      "dataset_name": "new-title-chinese"
+    },
+    "validation": {
+      "name": "validation",
+      "num_bytes": 6500124,
+      "num_examples": 1679,
+      "dataset_name": "new-title-chinese"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}
