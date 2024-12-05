@@ -5,3 +5,7 @@ processed_data
 *.pt
 *.bin
 *.pth
+*.arrow
+data
+*.safetensors
+vocab.txt
