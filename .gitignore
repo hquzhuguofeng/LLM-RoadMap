@@ -9,3 +9,4 @@ processed_data
 data
 *.safetensors
 vocab.txt
+__pycache__
