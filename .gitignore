@@ -10,3 +10,4 @@ data
 *.safetensors
 vocab.txt
 __pycache__
+checkpoint-*
