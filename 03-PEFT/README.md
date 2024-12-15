@@ -45,7 +45,28 @@
   如果是prefix_projection = True, 在大模型的embedding和每层前都加上新的参数。
   trainable params: 205,641,728 || all params: 1,508,753,408 || trainable%: 13.6299
 
+### 05-chatbot_lora
 
+使用lora tuning微调参数, 核心是作者认为模型训练存在一个内在维度，单独训练这个内在维度，好处是相比于p-tuning prompt-tuning prefix-tuning没有额外的参数量
+
+  - transformers == 4.30.0
+  - peft == 0.11.1
+  - accelerate == 0.32.1
+
+  设置的参数如下：
+  - config = LoraConfig(task_type=TaskType.CAUSAL_LM)
+  默认参数： lora的秩r;target_modules进行微调的对象；lora_alpha缩放因子；modules_to_save还可以对模型其他地方进行微调
+  LoraConfig(peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='D:/pretrained_model/models--Langboat--bloom-1b4-zh', revision=None, task_type=<TaskType.CAUSAL_LM: 'CAUSAL_LM'>, inference_mode=False, r=8, target_modules={'query_key_value'}, lora_alpha=8, lora_dropout=0.0, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', loftq_config={}, use_dora=False, layer_replication=None)
+
+  trainable params: 1,572,864 || all params: 1,304,684,544 || trainable%: 0.1206
+
+  如果参数设置如下：
+  - config = LoraConfig(task_type=TaskType.CAUSAL_LM, target_modules=["query_key_value", "dense_4h_to_h"])
+  则训练参数为：
+  trainable params: 3,538,944 || all params: 1,306,650,624 || trainable%: 0.2708
+
+  - config = LoraConfig(task_type=TaskType.CAUSAL_LM, target_modules=".*\.1.*query_key_value", modules_to_save=["word_embeddings"])
+  trainable params: 95,225,856 || all params: 1,398,337,536 || trainable%: 6.8099
 
 
 ### 文件目录说明
