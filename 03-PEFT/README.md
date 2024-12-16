@@ -68,6 +68,16 @@
   - config = LoraConfig(task_type=TaskType.CAUSAL_LM, target_modules=".*\.1.*query_key_value", modules_to_save=["word_embeddings"])
   trainable params: 95,225,856 || all params: 1,398,337,536 || trainable%: 6.8099
 
+  ### 06-chatbot_ia3
+  - 核心思想是通过可学习的向量对激活值抑制或放大。具体来说，会对k\v\ffn三部分进行调整，训练过程中同样冻结原始模型权重，只更新可学习的部分向量部分。
+  - config = IA3Config(task_type=TaskType.CAUSAL_LM)
+  trainable params: 344,064 || all params: 1,303,455,744 || trainable%: 0.0264
+
+  ### 07-peft_advanced_operation
+  - 如何peft微调自定义模型，直接通过target_model设置
+  - 一个主模型，多个适配器，用set_adapter进行配置，主要用于多任务的模型微调，不同的模型适配不同的lora，后期根据任务不同，走不同的Lora配置。
+  - 如何获取原始模型的输出结果（禁止适配器）进行原模型的对比或者说在训练DPO的时候，是需要原始模型的输出。
+
 
 ### 文件目录说明
 eg:
