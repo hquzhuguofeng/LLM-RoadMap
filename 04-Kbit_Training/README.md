@@ -69,6 +69,30 @@ prefix部分和target部分的内容。
 - prefix是full attention
 - target是prefix+self decoder attention
 
+chatglm模型讲解
+- 模型版本有v1和v2，这两个版本的区别是
+- 训练方式上，v1 prefix LM ; v2是 causal LM  在训练多轮的情况下v2的效率更高点；v3更多样的训练数据，更充分的训练步数，更合理的训练策略
+- 数据格式，[Round N]\n\n问：Prompt \n\n答：Response
+- 数据组织 v1是prefix learning 的组织方式，prefix部分是full attention
+- v2是将prompt放在后面了，
+- v3 开放了base模型，支持工具调用，支持代码执行
+- chatglm3新版本特性是对prompt进行一个改造
+
+```
+<|system|>
+you are chatglm3, a large language model.
+<|user|>
+Hi
+<|assistant|>
+hello，i am chatglm3.
+<|observation|>
+```
+chatglm3相当于有自己定义的prompt的格式，因此数据在处理的过程中，需要满足其要求,可以通过?model.chat方法查看调用的模板
+special token需要单独处理，包括角色类（user\assistant等）和eos_token
+对于非工具调用功能和代码执行功能的训练，要求解码的第一个token一定是"\n"
+chatglm3已经写好了prompt的定义的方法tokenizer.build_chat_input的方法； 不过拿到的是tensor，需要转化为list的格式
+如果使用lora训练最好指定Tasktype, 不然要指定remove_unused_columns为False，否则会报很奇怪的错误，很难debug
+
 
 
 
