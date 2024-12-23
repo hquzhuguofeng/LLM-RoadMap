@@ -154,6 +154,7 @@ bitsandbytes github 下载windows 64编译好的文件，进行pip install
   * x' = [3, 3, 3, 7] / scale_factor = [1.85, 1.85, 1.85, 4.32]
   
 简单线性量化的问题
+
 - 4bit的表示范围比8bit更小，粒度更粗
 - 不用非常大的离群值，就使得量化后的参数都集中在某个数值上
 - 量化误差会很大
@@ -162,8 +163,27 @@ bitsandbytes github 下载windows 64编译好的文件，进行pip install
 - 归一化的结果归属于第几个区间，量化结果便为几，数据的分布对黄花结果非常重要
 - 如果待量化的数据为均匀分布，那么线性量化的结果即使是4bit也不会太差
 
+正态分布
+  模型权重的真实分布有以下特点：权重的分布并非是均匀的，而是呈现一种正态分布的趋势；
+  因此，提出分位数量化【分块，计算量化值-缩放因子，进行量化，反量化】
+  - 以4bit为例，表示范围为16个值，将权重从小到大排序，找到十五个分位数，将其切分为十六块，权重数值落在第几块，量化的表示就是多少，范围[0-15]
+  - 此外，由于涉及到反量化，还需要给这16个值一个浮点数的映射，这个映射可以取分位区间两侧分位点的均值，用于反量化，这部分称之为量化值
+  - 具体操作时，我们只需要把待量化的数跟量化值进行比较，取最相近的值即可作为该数值的量化值，对应的表示可以通过分位数进行确定，存储时同时存储4bit的表示与对应量化值，计算时使用量化值反量化后进行计算
 
+画模型权重分布的脚本：model_weights_distribution.ipynb
 
+07-llama3.2-1b_qlora_4bit
+- 模型加载指定以下参数即可
+- load_in_4bit 开启4bit量化
+- bnb_4bit_compute_dtype 4bit量化中的计算类型
+- bnb_4bit_use_double_quant 是否开启双重量化 
+- bnb_4bit_quant_type 4bit量化类型
+- 分页优化器paged_adamw_32bit
+- trainable params: 851,968 || all params: 1,236,666,368 || trainable%: 0.0689
+
+08-chatglm3_qlora_4bit
+- 报错：ChatGLMTokenizer._pad() got an unexpected keyword argument 'padding_side'
+- transformers==4.40.2
 
 ### 文件目录说明
 eg:
