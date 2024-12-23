@@ -28,6 +28,31 @@
 4. 混合策略
 数据并行+流水并行+张量并行（3D并行）
 
+### 02-Data Parrallel
+Data Parrallel 原理
+- 训练流程
+- Step1 GPU0 加载model和batch数据
+- Step2 将batch数据从GPU0均分至各卡
+- Step3 将model从GPU0复制到各卡
+- Step4 各卡同时进行前向传播
+- Step5 GPU0收集各卡上的输出，并计算Loss
+- Step6 将Loss分发至各卡，进行反向传播，计算梯度
+- Step7 GPU0收集各卡的梯度，进行汇总
+- Step8 GPU0更新模型
+
+单GPU训练
+- 只要指定torch.nn.DataParallel(model)然后loss设置为标量，即可完成train流程的搭建，其实不用加这行代码，默认trainer检测到有多卡也会默认启动DP进行训练
+
+DP训练的问题和主要用途
+- batch越大，节约的时间越多，不然相比于GPU训练，时间都浪费在通信上
+因此，DP的问题，单进程，多线程，由于GIL锁的问题，不能充分发挥多卡的优势；由于DP的策略问题，会存在一个主节点占用比其他节点多的情况；效率较低，每次训练开始都要重新同步模型，大模型的同步时间会较难接受；只适用于单机训练，无法支持真正的分布式多节点训练。
+- 对于并行推理，DataParallel可以排上用场
+  - DataParallel.module.forward()
+  - DataParallel.forward()
+  - DataParallel.forward() 改进版本
+
+
+
 
 
 ### 文件目录说明
