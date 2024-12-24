@@ -49,7 +49,33 @@ DP训练的问题和主要用途
 - 对于并行推理，DataParallel可以排上用场
   - DataParallel.module.forward()
   - DataParallel.forward()
-  - DataParallel.forward() 改进版本
+  - DataParallel.forward() 改进版本，把模型并行推理的代码摘出来，将模型复制的代码，单独拎出来
+
+### 03-Distributed Data Parrallel
+- 训练流程
+- Step1 多进程，每个进程都加载数据和模型
+- Step2 各进程同事进行前向传播，得到输出logit
+- Step3 各进程分别计算Loss,反向传播，计算梯度
+- Step4 各进程间通信，将梯度在各卡同步 gradient all-reduce
+- Step5 各进程分别更新模型
+分布式的基本概念
+- group:进程组，一个分布式任务对应一个进程组，一般就是所有卡都在一个组里
+- world size:全局的并行数，一般情况下等于总的卡数
+- node:节点，可以是一台机器，或者一个容器，节点内包含多个GPU
+- rank(global rank):整个分布式训练任务内的进程序号
+- local rank:每个node内部的相对进程序号
+分布式训练中的通信
+- 在分布式模型训练中，通信是不同计算节点之间进行信息交换以协调训练任务的关键组成部分。
+通信类型
+- 点对点通信:将数据从一个进程传输到另一个进程称为点对点通信
+- 集合通信:一个分组中所有进程的通信模式称之为集合通信全
+  - 6种通信类型:Scatter、Gather、Reduce、All Reduce、Broadcast、All Gather
+  - scatter是分发；一个主进程分发到多个进程中
+  - gather是收集；多个进程的信息汇聚到一个主进程中
+  - reduce是在scatter的基础上将数据进行计算【加减乘除】多个进程汇总到一个进程上；
+  - all-reduce 多进程的信息在多进程间同步聚合+运算
+  - broadcast 就是一个数据广播到其他进程中
+  - all-gather 多进程的信息在多进程间同步聚合
 
 
 
