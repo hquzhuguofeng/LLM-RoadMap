@@ -76,6 +76,16 @@ DP训练的问题和主要用途
   - all-reduce 多进程的信息在多进程间同步聚合+运算
   - broadcast 就是一个数据广播到其他进程中
   - all-gather 多进程的信息在多进程间同步聚合
+代码实战
+- 定义进程组nccl
+- dataloader中的collate_fn需要自己去定义
+- DistributedDataParallel去定义模型
+- 模型初始化中需要放到0号节点上；同时模型训练和推理中，也是需要将数据放到对应rank0的节点上
+- torchrun --nproc_per_node=2 ddp.py  nproc_per_node 几张卡   
+- 因为每个进程都是单独的数据和模型，需要自己实现通信的内容
+  - train_loss部分需要all_reduce每个进程的loss并进行平均值的计算
+  - 打印loss, 用gobal_rank的内容进行控制打印loss
+  - eval_acc，需要all-reduce每个进程的acc的内容
 
 
 
