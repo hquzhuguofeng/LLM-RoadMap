@@ -93,6 +93,18 @@ def train(model, optimizer, trainloader, validloader, accelerate: Accelerator, e
                         loss = accelerate.reduce(loss,"mean")
                         accelerate.print(f"ep: {ep}, global_step: {global_step}, loss: {loss.item()}")
                         accelerate.log({'loss': loss.item()}, global_step)
+
+                    if global_step % 200 == 0 and global_step != 0:
+                        # 效果不好
+                        # accelerate.save_model(model, accelerate.project_dir + f"/step_{global_step}")
+                        accelerate.save_state(accelerate.project_dir + f"/step_{global_step}")
+                        accelerate.unwrap_model(model).save_pretrained(
+                            save_dictionary = accelerate.project_dir + f"/step_{global_step}/model",
+                            is_main_process = accelerate.is_main_process,
+                            state_dict = accelerate.get_state_dict(model),
+                            save_func = accelerate.save
+                        )
+
                 pbar.set_postfix({'loss': loss.item()})
         acc = evaluate(model, validloader, accelerate)
         accelerate.print(f"ep: {ep}, acc: {acc}")

@@ -163,8 +163,20 @@ accelerate使用进阶
   - MLflow
   - Neptune
   - Visdom
-- 模型保存点
+- 模型保存点和模型保存
+  - 单机训练，调用model.save_pretrained(save_directory)
+  - 分布式训练情况：直接调用model.save_pretrained(save_directory),需要去包装
+  - 并非所有进程都需要存，主进程保存即可
+    - accelerator.save_model()
+      - 不保存配置文件，只保存模型参数
+      - 对于PEFT的魔宗支持不好，会保存完整的模型
+    - accelerate.unwrap_model(model).save_pretrained(save_dictionary = accelerate.project_dir + f"/step_{global_step}",is_main_process = accelerate.is_main_process,state_dict = accelerate.get_state_dict(model),save_func = accelerate.save
+                        )
 - 断点续训
+  - 保存检查点：accelerator.save_state()
+  - 加载检查点：accelerator.load_state()
+  - 计算跳过的轮数和步数：resume_epoch、resume_step
+  - 数据集跳过对应的步数：accelerate.skip_first_batches(trainloader, resume_step)
 
 
 
