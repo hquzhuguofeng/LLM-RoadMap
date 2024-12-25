@@ -1,15 +1,14 @@
-
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, BertTokenizer, BertForSequenceClassification
-from torch.utils.data import Dataset
-import torch.distributed as dist
-import pandas as pd
-import torch
-from torch.utils.data import random_split
-from torch.utils.data import DataLoader
-from torch.utils.data.distributed import DistributedSampler
-from torch.optim import Adam
 import os
+import pandas as pd
+from tqdm import tqdm
+
+from torch.utils.data import Dataset, random_split, DataLoader, DistributedSampler
+from torch.optim import Adam
+import torch
+import torch.distributed as dist
 from torch.nn.parallel import DistributedDataParallel as DDP
+
+from transformers import BertTokenizer, BertForSequenceClassification
 
 # 初始化任务的进程组
 dist.init_process_group(backend="nccl")
@@ -28,8 +27,6 @@ class MyDataset(Dataset):
     def __len__(self):
         return len(self.data)
 
-
-
 def collate_func(batch):
     texts, labels = [], []
     for item in batch:
@@ -38,7 +35,6 @@ def collate_func(batch):
     inputs = tokenizer(texts, max_length=128, padding="max_length", truncation=True, return_tensors="pt")
     inputs["labels"] = torch.tensor(labels)
     return inputs
-
 
 # ## Step7 训练与验证
 def print_rank_0(info):
@@ -63,7 +59,8 @@ def train(epoch=3, log_step=100):
     for ep in range(epoch):
         model.train()
         trainloader.sampler.set_epoch(ep)
-        for batch in trainloader:
+        pbar = tqdm(trainloader, desc=f"Epoch {ep+1}/{epoch}")
+        for batch in pbar:
             if torch.cuda.is_available():
                 batch = {k: v.to(int(os.environ["LOCAL_RANK"])) for k, v in batch.items()}
             optimizer.zero_grad()
@@ -73,27 +70,29 @@ def train(epoch=3, log_step=100):
             optimizer.step()
             if global_step % log_step == 0:
                 dist.all_reduce(loss, op=dist.ReduceOp.AVG)
-                print_rank_0(f"ep: {ep}, global_step: {global_step}, loss: {loss.item()}")
+                print_rank_0(f"global_step: {global_step}, loss: {loss.item()}")
             global_step += 1
+            pbar.set_postfix({'loss': loss.item()})
         acc = evaluate()
-        print_rank_0(f"ep: {ep}, acc: {acc}")
-
+        print_rank_0(f"Epoch {ep+1} finished. Accuracy: {acc}")
 
 dataset = MyDataset()
 
 # ## Step4 划分数据集
-trainset, validset = random_split(dataset, lengths=[0.9, 0.1], generator=torch.Generator().manual_seed(42))
+length = len(dataset)
+train_length = int(length * 0.9)  # 90%用于训练
+valid_length = length - train_length  # 剩余10%用于验证
+trainset, validset = random_split(dataset, lengths=[train_length, valid_length], generator=torch.Generator().manual_seed(42))
 
 # ## Step5 创建Dataloader 
 # 模型是 chinese-roberta-wwm-ext
-tokenizer = BertTokenizer.from_pretrained("/gemini/code/model")
+tokenizer = BertTokenizer.from_pretrained("./chinese-roberta-wwm-ext-large")
 
-trainloader = DataLoader(trainset, batch_size=32, collate_fn=collate_func, sampler=DistributedSampler(trainset))
+trainloader = DataLoader(trainset, batch_size=16, collate_fn=collate_func, sampler=DistributedSampler(trainset))
 validloader = DataLoader(validset, batch_size=64, collate_fn=collate_func, sampler=DistributedSampler(validset))
 
-
 # ## Step6 创建模型及优化器
-model = BertForSequenceClassification.from_pretrained("/gemini/code/model")
+model = BertForSequenceClassification.from_pretrained("./chinese-roberta-wwm-ext-large")
 if torch.cuda.is_available():
     model = model.to(int(os.environ["LOCAL_RANK"]))
 model = DDP(model)
