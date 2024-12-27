@@ -67,7 +67,7 @@ def prepare_model_and_optimizer():
 def evaluate(model, validloader, accelerator: Accelerator):
     model.eval()
     acc_num = 0
-    with torch.inference_mode():
+    with torch.no_grad():
         for batch in validloader:
             output = model(**batch)
             pred = torch.argmax(output.logits, dim=-1)

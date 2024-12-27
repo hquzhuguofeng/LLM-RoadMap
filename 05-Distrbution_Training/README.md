@@ -113,7 +113,9 @@ huggingface trainer自带DDP
 - 模型评估部分：使用gather_for_metrics进行数据的分析
 - 包括模型训练部分的内容，accelerate同样提供了reduce loss的方法
 - 训练的脚本：torchrun --nproc_per_node 2 05-ddp_accelerator.py
-- accelerate同样提供了启动的命令：accelerate launch 05-ddp_accelerator.py
+- accelerate同样提供了启动的命令：
+    - accelerate config 进行参数的配置
+    - accelerate launch 05-ddp_accelerator.py
 - accelerate config 可以配置分布式模型训练的参数
   - This machine\multi-GPU\1 multi-node\no:dynamo、deepspeed、FSDP、Megatorn-LM\2GPUs\no mixed_precision
 
@@ -177,6 +179,29 @@ accelerate使用进阶
   - 加载检查点：accelerator.load_state()
   - 计算跳过的轮数和步数：resume_epoch、resume_step
   - 数据集跳过对应的步数：accelerate.skip_first_batches(trainloader, resume_step)
+- zero策略通信量分析
+  - zero1 optimizer states(优化器)
+  - zero2 os + gradient(梯度) 与DDP相比，通信总量不变
+  - zero3 os + gradient + parameters(模型参数) 需要额外的参数通信，与DDP相比通信总量提升1.5倍
+  - zero ++ 针对zero3通信进行优化，通过权重量化，权重分层储存、梯度量化降低跨节点通信量
+  - zero offload 将优化器、模型参数量从显存卸载至内存，或者二者协同搭配（offload ++）
+  - DeepSpeed Ulysses 针对长序列训练，将各个样本在序列维度上分割给参与的GPU
+  - **accelerate deepspeed集成**
+    - 配置deepspeed相关信息 accelerate config
+    - 使用accelerate命令启动脚本：accelerate launch ddp_accelerate.py
+  - deepspeed == 0.16.2 & torch == 2.5.1 & accelerate == 1.2.1 会报错：[rank1]: AssertionError: It is illegal to call Engine.step() inside no_sync context manager
+  - 变更为：deepspeed == 0.14.1 & torch == 2.5.1 & accelerate == 1.2.1 能够运行
+    - accelerate launch --config_file zero2_config.yaml 06-ddp_accelerate_advanced.py 配置内容为zero2 
+    - accelerate launch --config_file zero2_config_with_json.yaml 06-ddp_accelerate_advanced.py 配置内容为zero2 
+    - accelerate launch --config_file zero3_config.yaml 06-ddp_accelerate_advanced_zero3.py 配置内容为zero3
+    - accelerate launch --config_file zero3_config_with_json.yaml 06-ddp_accelerate_advanced_zero3.py 配置内容为zero3
+  - zero3_init_flag 可以加载大模型
+  - zero3_save_16bit_model 用于保存模型
+  - 如果是指定了config.json 则使用stage3_gather_16bit_weights_on_model_save
+  - evaluate使用torch.no_grad()上下文
+  - trainer 中的参数需要和acclerate config中的参数对齐
+- 多机多卡（TODO）
+
 
 
 
