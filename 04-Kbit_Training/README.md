@@ -1,16 +1,57 @@
-
+# 04-Kbit_Training
  
 ## 目录
 
-- [bitfit](#bifit)
+- [上手指南](#上手指南)
   - [开发前的配置要求](#开发前的配置要求)
   - [安装步骤](#安装步骤)
 - [文件目录说明](#文件目录说明)
+- [使用到的框架](#使用到的框架)
+- [贡献者](#贡献者)
+  - [如何参与开源项目](#如何参与开源项目)
+- [版本控制](#版本控制)
+- [作者](#作者)
+- [版权说明](#版权说明)
+- [鸣谢](#鸣谢)
+
+
+### 开发前的配置要求
+
+1. Python == 3.11.8
+2. PyTorch == 2.1.1+cu121
+3. transformers == 4.47.1
+4. peft == 0.11.1
+
+### 安装步骤
+
+
+```sh
+git clone https://github.com/hquzhuguofeng/LLM-RoadMap.git
+```
 
 1. 数据集：https://huggingface.co/datasets/shibing624/alpaca_data_zh
 2. 预训练模型：Langboat/bloom-1b4-zh
 
-### 01-低精度训练和模型下载
+### 文件目录说明
+eg:
+
+```
+04-Kbit_Training
+├── chatbot
+├── chatbot_lora_kbit
+├── data
+├── 01-download.ipynb
+├── 02-llama2_lora_16bit.ipynb
+├── 03-chatglm3_lora_16bit.ipynb
+├── 04-chatglm3_infer.ipynb
+├── 05-llama2_lora_8bit.ipynb
+├── 06-chatglm3_lora_8bit.ipynb
+├── 07-llama2_qlora_4bit.ipynb
+├── 08-chatglm3_qlora_4bit.ipynb
+└── model_weights_distribution.ipynb
+```
+
+#### 01-低精度训练和模型下载
 
 模型训练的显存占用
 - 模型权重（4Bytes * 模型参数量）
@@ -32,7 +73,7 @@
 - 1b参数量大概是4G显存
 - 常见的低精度数据类型：fp16\bf16\int8\int4
 
-### 02-llama2_lora_16bit
+#### 02-llama2_lora_16bit
 
 transformers == 4.38.0
 accelerate == 1.2.1
@@ -57,7 +98,7 @@ accelerate == 1.2.1
 - 原理是torch.tensor(1e-8).half() -> tensor(0., dtype=torch.float16) 上溢出了
 - adam_epsilon=1e-5
 
-### 03-chatglm3_lora_16bit
+#### 03-chatglm3_lora_16bit
 GLM架构是集合了自回归和自编码架构的特点。
 prefix部分和target部分的内容。
 - x1 x2 M x4 M   进行span的预测
@@ -93,7 +134,7 @@ hello，i am chatglm3.
 - chatglm3已经写好了prompt的定义的方法tokenizer.build_chat_input的方法； 不过拿到的是tensor，需要转化为list的格式
 - 如果使用lora训练最好指定Tasktype, 不然要指定remove_unused_columns为False，否则会报很奇怪的错误，很难debug
 
-### 04-8bit的量化
+#### 04-8bit的量化
 量化就是将高精度的数字通过某种手段将其转换为低精度的数据。量化正常来说就是量化模型权重。
 `int8量化`（即将数据从浮动精度转换为8位整数精度）是一种常用于深度学习模型优化的技术，它通过减少数值表示的精度来加速计算和减小模型存储需求，同时尽可能减少模型精度损失。量化方法通常有多种，其中 `absmax` 是一种常见的量化方法。
 
@@ -138,7 +179,7 @@ bitsandbytes github 下载windows 64编译好的文件，进行pip install
 - 使用，load_in_8bit=True即可
 - 注意，如果训练了一个8bit的模型，最好不要和原模型进行合并，会出现精度round的问题
 
-### 05-4bit的量化（qlora量化）
+#### 05-4bit的量化（qlora量化）
 
 
 4bit 线性量化例子
@@ -185,50 +226,17 @@ bitsandbytes github 下载windows 64编译好的文件，进行pip install
 - 报错：ChatGLMTokenizer._pad() got an unexpected keyword argument 'padding_side'
 - transformers==4.40.2
 
-### 文件目录说明
-eg:
 
-```
-filetree 
-├── ARCHITECTURE.md
-├── LICENSE.txt
-├── README.md
-├── /account/
-├── /bbs/
-├── /docs/
-│  ├── /rules/
-│  │  ├── backend.txt
-│  │  └── frontend.txt
-├── manage.py
-├── /oa/
-├── /static/
-├── /templates/
-├── useless.md
-└── /util/
-
-```
-
-
-
-
-
-### 开发的架构 
-
-请阅读[ARCHITECTURE.md](https://github.com/shaojintian/Best_README_template/blob/master/ARCHITECTURE.md) 查阅为该项目的架构。
-
-### 部署
-
-暂无
 
 ### 使用到的框架
 
-- [xxxxxxx](https://getbootstrap.com)
-- [xxxxxxx](https://jquery.com)
-- [xxxxxxx](https://laravel.com)
+- pytorch
+- transformers
+- peft
 
 ### 贡献者
 
-请阅读**CONTRIBUTING.md** 查阅为该项目做出贡献的开发者。
+GuoFeng
 
 
 ### 版本控制
@@ -237,10 +245,19 @@ filetree
 
 ### 作者
 
-xxx@xxxx
+[GuoFeng Github](https://github.com/hquzhuguofeng)
 
-知乎:xxxx  &ensp; qq:xxxxxx    
+[GuoFeng CSDN](https://blog.csdn.net/weixin_46133588?spm=1011.2415.3001.5343)
 
  *您也可以在贡献者名单中参看所有参与该项目的开发者。*
+
+
+### 版权说明
+
+None
+
+### 鸣谢
+- [Transformers lessons](https://github.com/zyds/transformers-code)
+- [Huggingface Transformers](https://huggingface.co/docs/transformers/v4.27.2/zh/index)
 
 

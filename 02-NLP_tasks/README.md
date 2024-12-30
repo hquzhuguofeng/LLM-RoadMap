@@ -1,84 +1,79 @@
 
  
+# 02-NLP_tasks
+
 ## 目录
 
 - [上手指南](#上手指南)
   - [开发前的配置要求](#开发前的配置要求)
   - [安装步骤](#安装步骤)
 - [文件目录说明](#文件目录说明)
-- [开发的架构](#开发的架构)
-- [部署](#部署)
 - [使用到的框架](#使用到的框架)
 - [贡献者](#贡献者)
   - [如何参与开源项目](#如何参与开源项目)
 - [版本控制](#版本控制)
 - [作者](#作者)
+- [版权说明](#版权说明)
 - [鸣谢](#鸣谢)
 
-### 01-transformers 常规NLP任务
+## 上手指南
 
-请将所有链接中的“shaojintian/Best_README_template”改为“your_github_name/your_repository”
+### 开发前的配置要求
 
+1. Python == 3.11.8
+2. PyTorch == 2.1.1+cu121
+3. transformers == 4.47.1
 
+### 安装步骤
 
-###### 开发前的配置要求
-
-1. xxxxx x.x.x
-2. xxxxx x.x.x
-
-###### **安装步骤**
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
 
 ```sh
-git clone https://github.com/shaojintian/Best_README_template.git
+git clone https://github.com/hquzhuguofeng/LLM-RoadMap.git
 ```
 
 ### 文件目录说明
 eg:
 
 ```
-filetree 
-├── ARCHITECTURE.md
-├── LICENSE.txt
+02-NLP_tasks
+├── __pycache__
+├── data
+├── dual_model
+├── masked_lm
+├── model_for_ner
+├── multiple_choice
+├── 00-template.ipynb
+├── 01-transformer_nlp.ipynb
+├── 02-ner.ipynb
+├── 03-mrc_simple.ipynb
+├── 04-mrc_slice_windows.ipynb
+├── 05-multiple_choice.ipynb
+├── 06-cross_model.ipynb
+├── 07-dual_model.ipynb
+├── 08-retrieval_bot.ipynb
+├── 09-masked_lm.ipynb
+├── 10-causal_lm.ipynb
+├── 11-summarization_t5.ipynb
+├── 12-summarization_glm.ipynb
+├── 13-chatbot.ipynb
+├── cmrc_eval.py
+├── dual_model_bert.py
+├── metric_accuracy.py
+├── metric_f1.py
+├── mrc_slice_windows.py
 ├── README.md
-├── /account/
-├── /bbs/
-├── /docs/
-│  ├── /rules/
-│  │  ├── backend.txt
-│  │  └── frontend.txt
-├── manage.py
-├── /oa/
-├── /static/
-├── /templates/
-├── useless.md
-└── /util/
-
+└── seqeval_metric.py
 ```
 
 
-
-
-
-### 开发的架构 
-
-请阅读[ARCHITECTURE.md](https://github.com/shaojintian/Best_README_template/blob/master/ARCHITECTURE.md) 查阅为该项目的架构。
-
-### 部署
-
-暂无
-
 ### 使用到的框架
 
-- [xxxxxxx](https://getbootstrap.com)
-- [xxxxxxx](https://jquery.com)
-- [xxxxxxx](https://laravel.com)
+- pytorch
+- transformers
 
 ### 贡献者
 
-请阅读**CONTRIBUTING.md** 查阅为该项目做出贡献的开发者。
+GuoFeng
 
 
 ### 版本控制
@@ -87,39 +82,21 @@ filetree
 
 ### 作者
 
-xxx@xxxx
+[GuoFeng Github](https://github.com/hquzhuguofeng)
 
-知乎:xxxx  &ensp; qq:xxxxxx    
+[GuoFeng CSDN](https://blog.csdn.net/weixin_46133588?spm=1011.2415.3001.5343)
 
  *您也可以在贡献者名单中参看所有参与该项目的开发者。*
 
 ### 版权说明
 
-该项目签署了MIT 授权许可，详情请参阅 [LICENSE.txt](https://github.com/shaojintian/Best_README_template/blob/master/LICENSE.txt)
+None
 
 ### 鸣谢
 
 
-- [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-- [Img Shields](https://shields.io)
-- [Choose an Open Source License](https://choosealicense.com)
-- [GitHub Pages](https://pages.github.com)
-- [Animate.css](https://daneden.github.io/animate.css)
-- [xxxxxxxxxxxxxx](https://connoratherton.com/loaders)
+- [Transformers lessons](https://github.com/zyds/transformers-code)
+- [Huggingface Transformers](https://huggingface.co/docs/transformers/v4.27.2/zh/index)
 
-<!-- links -->
-[your-project-path]:shaojintian/Best_README_template
-[contributors-shield]: https://img.shields.io/github/contributors/shaojintian/Best_README_template.svg?style=flat-square
-[contributors-url]: https://github.com/shaojintian/Best_README_template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/shaojintian/Best_README_template.svg?style=flat-square
-[forks-url]: https://github.com/shaojintian/Best_README_template/network/members
-[stars-shield]: https://img.shields.io/github/stars/shaojintian/Best_README_template.svg?style=flat-square
-[stars-url]: https://github.com/shaojintian/Best_README_template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/shaojintian/Best_README_template.svg?style=flat-square
-[issues-url]: https://img.shields.io/github/issues/shaojintian/Best_README_template.svg
-[license-shield]: https://img.shields.io/github/license/shaojintian/Best_README_template.svg?style=flat-square
-[license-url]: https://github.com/shaojintian/Best_README_template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/shaojintian
 
 

@@ -1,15 +1,66 @@
 
+# 05-Distribution_Training
  
 ## 目录
 
-- [bitfit](#bifit)
+- [上手指南](#上手指南)
   - [开发前的配置要求](#开发前的配置要求)
   - [安装步骤](#安装步骤)
 - [文件目录说明](#文件目录说明)
+- [使用到的框架](#使用到的框架)
+- [贡献者](#贡献者)
+  - [如何参与开源项目](#如何参与开源项目)
+- [版本控制](#版本控制)
+- [作者](#作者)
+- [版权说明](#版权说明)
+- [鸣谢](#鸣谢)
 
 
+### 开发前的配置要求
 
-### 01-分布式训练基础与环境配置
+1. Python == 3.11.8
+2. PyTorch == 2.1.1+cu121
+3. transformers == 4.47.1
+4. peft == 0.11.1
+5. accelerate == 1.2.1
+
+### 安装步骤
+
+
+```sh
+git clone https://github.com/hquzhuguofeng/LLM-RoadMap.git
+```
+
+1. 数据集：https://huggingface.co/datasets/shibing624/alpaca_data_zh
+2. 预训练模型：Langboat/bloom-1b4-zh
+3. 环境参考：requirements.txt
+
+### 文件目录说明
+eg:
+
+```
+05-Distribution_Training
+├── 02-pytorch_dp_demo.ipynb
+├── 03-ddp.py
+├── 04-ddp_trainer.py
+├── 05-ddp_accelerator.py
+├── 06-ddp_accelerate_advanced_zero3.py
+├── 06-ddp_accelerate_advanced.py
+├── accelerate_config.yaml
+├── ChnSentiCorp_htl_all.csv
+├── metric_accuracy.py
+├── metric_f1.py
+├── README.md
+├── zero_stage2_config.json
+├── zero_stage3_config.json
+├── zero2_config_with_json.yaml
+├── zero2_config.yaml
+├── zero3_config_with_json.yaml
+└── zero3_config.yaml
+```
+
+
+#### 01-分布式训练基础与环境配置
 
 单卡场景下解决显卡问题
 - 可训练参数【lora\p-tuning】
@@ -28,7 +79,7 @@
 4. 混合策略
 数据并行+流水并行+张量并行（3D并行）
 
-### 02-Data Parrallel
+#### 02-Data Parrallel
 Data Parrallel 原理
 - 训练流程
 - Step1 GPU0 加载model和batch数据
@@ -51,7 +102,7 @@ DP训练的问题和主要用途
   - DataParallel.forward()
   - DataParallel.forward() 改进版本，把模型并行推理的代码摘出来，将模型复制的代码，单独拎出来
 
-### 03-Distributed Data Parrallel
+#### 03-Distributed Data Parrallel
 - 训练流程
 - Step1 多进程，每个进程都加载数据和模型
 - Step2 各进程同事进行前向传播，得到输出logit
@@ -101,7 +152,7 @@ huggingface trainer自带DDP
 - 将分布式的代码看作单进程的代码即可，只是需要分布式的数据采样器以及启动略有不同print打印的都是各自进程内的信息，需要全局的信息则需要自行调用通信计算结果数据放置到指定设备上时需要注意使用正确的deviceid，一般用local_rank
 
 
-### 04-Accelerate分布式训练
+#### 04-Accelerate分布式训练
 介绍
 - Accelerate是Huggingface生态中针对分布式训练推理提供的库，目标是简化分布式训练的流程
 - Accelerate库本身不提供分布式训练的内容，但是其内部集成了多种分布式训练框架DDP、FSDP、Deepspeed等
@@ -206,51 +257,16 @@ accelerate使用进阶
 
 
 
-
-### 文件目录说明
-eg:
-
-```
-filetree 
-├── ARCHITECTURE.md
-├── LICENSE.txt
-├── README.md
-├── /account/
-├── /bbs/
-├── /docs/
-│  ├── /rules/
-│  │  ├── backend.txt
-│  │  └── frontend.txt
-├── manage.py
-├── /oa/
-├── /static/
-├── /templates/
-├── useless.md
-└── /util/
-
-```
-
-
-
-
-
-### 开发的架构 
-
-请阅读[ARCHITECTURE.md](https://github.com/shaojintian/Best_README_template/blob/master/ARCHITECTURE.md) 查阅为该项目的架构。
-
-### 部署
-
-暂无
-
 ### 使用到的框架
 
-- [xxxxxxx](https://getbootstrap.com)
-- [xxxxxxx](https://jquery.com)
-- [xxxxxxx](https://laravel.com)
+- pytorch
+- transformers
+- peft
+- accelerate
 
 ### 贡献者
 
-请阅读**CONTRIBUTING.md** 查阅为该项目做出贡献的开发者。
+GuoFeng
 
 
 ### 版本控制
@@ -259,10 +275,21 @@ filetree
 
 ### 作者
 
-xxx@xxxx
+[GuoFeng Github](https://github.com/hquzhuguofeng)
 
-知乎:xxxx  &ensp; qq:xxxxxx    
+[GuoFeng CSDN](https://blog.csdn.net/weixin_46133588?spm=1011.2415.3001.5343)
 
  *您也可以在贡献者名单中参看所有参与该项目的开发者。*
+
+
+### 版权说明
+
+None
+
+### 鸣谢
+- [Transformers lessons](https://github.com/zyds/transformers-code)
+- [Huggingface Transformers](https://huggingface.co/docs/transformers/v4.27.2/zh/index)
+
+
 
 
