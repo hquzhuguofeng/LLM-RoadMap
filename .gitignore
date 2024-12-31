@@ -6,7 +6,7 @@ processed_data
 *.bin
 *.pth
 *.arrow
-data
+downloads
 *.safetensors
 vocab.txt
 __pycache__

@@ -65,6 +65,21 @@ eg:
 └── seqeval_metric.py
 ```
 
+#### 文本匹配任务
+对应文件：
+- 06-cross_model.ipynb
+- 07-dual_model.ipynb
+
+- 07-01-train_pointwise.py 单塔模型
+- 07-01-inference_pointwise.py
+
+- 07-02-train_dssm.py 双塔模型 DSSM
+- 07-02-inference_dssm.py
+
+- 07-03-train_sentence_transformer.py 双塔模型 sentence_transformers
+- 07-03-inference_sentence_transformer.py
+
+详情查看：[Text Matching MD](TEXT_MATCHING.md)
 
 ### 使用到的框架
 
