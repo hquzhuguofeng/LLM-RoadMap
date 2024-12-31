@@ -8,6 +8,8 @@
   - [开发前的配置要求](#开发前的配置要求)
   - [安装步骤](#安装步骤)
 - [文件目录说明](#文件目录说明)
+  - [文本匹配](#文本匹配任务)
+  - [信息抽取]()
 - [使用到的框架](#使用到的框架)
 - [贡献者](#贡献者)
   - [如何参与开源项目](#如何参与开源项目)
@@ -50,6 +52,14 @@ eg:
 ├── 05-multiple_choice.ipynb
 ├── 06-cross_model.ipynb
 ├── 07-dual_model.ipynb
+├── 07-01-inference_pointwise.py
+├── 07-01-train_pointwise.py
+├── 07-02-inference_dssm.py
+├── 07-02-train_dssm.py
+├── 07-03-inference_sentence_transformer.py
+├── 07-03-train_sentence_transformer.py
+├── 07-04-inference_simcse.py
+└── 07-04-train_simcse.py
 ├── 08-retrieval_bot.ipynb
 ├── 09-masked_lm.ipynb
 ├── 10-causal_lm.ipynb
@@ -58,11 +68,16 @@ eg:
 ├── 13-chatbot.ipynb
 ├── cmrc_eval.py
 ├── dual_model_bert.py
+├── get_embedding.py
+├── iTrainingLogger.py
 ├── metric_accuracy.py
 ├── metric_f1.py
+├── model.py
 ├── mrc_slice_windows.py
 ├── README.md
-└── seqeval_metric.py
+├── seqeval_metric.py
+├── TEXT_MATCHING.md
+└── utils.py
 ```
 
 #### 文本匹配任务
@@ -79,7 +94,17 @@ eg:
 - 07-03-train_sentence_transformer.py 双塔模型 sentence_transformers
 - 07-03-inference_sentence_transformer.py
 
+- 07-04-train_simcse.py
+- 07-04-inference_simcse.py
+
 详情查看：[Text Matching MD](TEXT_MATCHING.md)
+
+#### 信息抽取
+对应文件：
+- 02-ner.ipynb
+- UIE_torch
+
+详情查看：[UIE MD](./UIE_torch/readme.md)
 
 ### 使用到的框架
 
