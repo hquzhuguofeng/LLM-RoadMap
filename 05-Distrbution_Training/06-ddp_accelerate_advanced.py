@@ -1,3 +1,27 @@
+import debugpy
+
+try:
+    debugpy.listen(("localhost", 9501))
+    print("Waiting for degger attach")
+    debugpy.wait_for_client()
+except Exception as e:
+    pass
+
+'''
+在vscode的launch.json的configuration里面，加上这个配置
+
+{
+            "name": "sh_file_debug",
+            "type": "debugpy",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 9501
+            }
+        },
+
+'''
+
 import time
 import math
 import torch
