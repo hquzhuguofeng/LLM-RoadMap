@@ -87,15 +87,78 @@ eg:
 - 07-dual_model.ipynb
 
 - 07-01-train_pointwise.py 单塔模型
+```
+python train_pointwise.py \
+    --model "nghuyong/ernie-3.0-base-zh" \
+    --train_path "data/comment_classify/train.txt" \
+    --dev_path "data/comment_classify/dev.txt" \
+    --save_dir "checkpoints/comment_classify" \
+    --img_log_dir "logs/comment_classify" \
+    --img_log_name "ERNIE-PointWise" \
+    --batch_size 8 \
+    --max_seq_len 128 \
+    --valid_steps 50 \
+    --logging_steps 10 \
+    --num_train_epochs 10 \
+    --device "cuda:0"
+```
 - 07-01-inference_pointwise.py
 
+
 - 07-02-train_dssm.py 双塔模型 DSSM
+```
+python train_dssm.py \
+    --model "nghuyong/ernie-3.0-base-zh" \
+    --train_path "data/comment_classify/train.txt" \
+    --dev_path "data/comment_classify/dev.txt" \
+    --save_dir "checkpoints/comment_classify/dssm" \
+    --img_log_dir "logs/comment_classify" \
+    --img_log_name "ERNIE-DSSM" \
+    --batch_size 8 \
+    --max_seq_len 128 \
+    --valid_steps 50 \
+    --logging_steps 10 \
+    --num_train_epochs 10 \
+    --device "cuda:0"
+```
 - 07-02-inference_dssm.py
 
 - 07-03-train_sentence_transformer.py 双塔模型 sentence_transformers
+```
+python train_sentence_transformer.py \
+    --model "nghuyong/ernie-3.0-base-zh" \
+    --train_path "data/comment_classify/train.txt" \
+    --dev_path "data/comment_classify/dev.txt" \
+    --save_dir "checkpoints/comment_classify/sentence_transformer" \
+    --img_log_dir "logs/comment_classify" \
+    --img_log_name "Sentence-Ernie" \
+    --batch_size 8 \
+    --max_seq_len 256 \
+    --valid_steps 50 \
+    --logging_steps 10 \
+    --num_train_epochs 10 \
+    --device "cuda:1"
+```
 - 07-03-inference_sentence_transformer.py
 
 - 07-04-train_simcse.py
+```
+python train_simcse.py \
+    --model "nghuyong/ernie-3.0-base-zh" \
+    --train_path "data/LCQMC/train.txt" \
+    --dev_path "data/LCQMC/dev.tsv" \
+    --save_dir "checkpoints/LCQMC" \
+    --img_log_dir "logs/LCQMC" \
+    --img_log_name "ERNIE-ESimCSE" \
+    --learning_rate 1e-5 \
+    --dropout 0.3 \
+    --batch_size 64 \
+    --max_seq_len 64 \
+    --valid_steps 400 \
+    --logging_steps 50 \
+    --num_train_epochs 8 \
+    --device "cuda:2"
+```
 - 07-04-inference_simcse.py
 
 详情查看：[Text Matching MD](TEXT_MATCHING.md)

@@ -350,7 +350,7 @@ simcse的缺点：所有的正例都是由「同一个句子」过了两次模�
 修改训练脚本 `train.sh` 里的对应参数, 开启模型训练：
 
 ```sh
-python train.py \
+python train_simcse.py \
     --model "nghuyong/ernie-3.0-base-zh" \
     --train_path "data/LCQMC/train.txt" \
     --dev_path "data/LCQMC/dev.tsv" \
@@ -424,3 +424,9 @@ python inference.py
 
 ```python
 [0.1527191698551178, 0.9263839721679688]   # 第一对文本相似分数较低，第二对文本相似分数较高
+```
+
+#### 3.4.4 模型推理加速
+使用onnxruntime加速sbert的推理速度
+详情见 [07-04-sbert_onnx.ipynb](./07-04-sbert_onnx.ipynb)
+
