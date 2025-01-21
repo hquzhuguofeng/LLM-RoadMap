@@ -67,6 +67,8 @@ eg:
 ├── 11-summarization_t5.ipynb
 ├── 12-summarization_glm.ipynb
 ├── 13-chatbot.ipynb
+├── 14-llama_demo.py
+├── 15-moe_block_demo.py
 ├── cmrc_eval.py
 ├── dual_model_bert.py
 ├── get_embedding.py

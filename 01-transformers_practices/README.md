@@ -82,6 +82,8 @@
 1. **在线加载**
    - 使用`AutoModel`类直接从Hugging Face加载预训练模型。
    - 强制重新下载模型以确保获取最新版本。
+   - torch.save 保存的是model.state_dict()
+   - huggingface 有种数据格式是torhc meta device可以直接从磁盘加载到目标地址上cpu,gpu,tpu,npu？上
 
 2. **模型下载**
    - 当需要科学上网时，通过Git或Git LFS手动克隆Hugging Face上的模型仓库。
