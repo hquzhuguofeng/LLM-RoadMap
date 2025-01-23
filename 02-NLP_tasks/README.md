@@ -45,6 +45,7 @@ eg:
 ├── model_for_ner
 ├── multiple_choice
 ├── UIE_torch
+├── data_sample_strategy
 ├── 00-template.ipynb
 ├── 01-transformer_nlp.ipynb
 ├── 02-ner.ipynb
