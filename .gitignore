@@ -11,3 +11,5 @@ downloads
 vocab.txt
 __pycache__
 checkpoint-*
+!zero_stage2_config.json
+!zero_stage3_config.json
