@@ -13,3 +13,7 @@ __pycache__
 checkpoint-*
 !zero_stage2_config.json
 !zero_stage3_config.json
+!ds_zero2_no_offload.json
+!launch.json
+!data_0.json
+!data_1.json
