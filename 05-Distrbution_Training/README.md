@@ -40,6 +40,7 @@ eg:
 
 ```
 05-Distribution_Training
+├── qwen_sft_DT_debug
 ├── 02-pytorch_dp_demo.ipynb
 ├── 03-ddp.py
 ├── 04-ddp_trainer.py
