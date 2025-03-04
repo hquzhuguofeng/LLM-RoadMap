@@ -42,7 +42,7 @@
 ## 更新日志
 
 #### 📌 置顶
-
+* [2025.03.04] 🍬基于self-instrut基本原理实现`domain_datasets`的自我扩充, 详情参考[self-intruct-zh.md](./02-NLP_tasks/self-instruct-zh/README.md)
 * [2025.02.20] 🌟🌟🌟基于`clip`和`qwen2.5`模型，基于`deepspeed-zero2`从零开始训练`llava`模型
 * [2025.01.21] 🚀MOE block的实际运行机理和数据流动室验，[moe_block_demo](./02-NLP_tasks/15-moe_block_demo.py)；参考`liger_kernel`的内容，基于`triton`实现`MLP`加速
 * [2025.01.20] 💪基于accelerate和deepspeed框架，实现`Data Parrallel`、`Distributed Data Parrallel`、zero2、zero3策略的模型训练

@@ -46,6 +46,7 @@ eg:
 ├── multiple_choice
 ├── UIE_torch
 ├── data_sample_strategy
+├── self-instruct-zh
 ├── 00-template.ipynb
 ├── 01-transformer_nlp.ipynb
 ├── 02-ner.ipynb
@@ -172,6 +173,17 @@ python train_simcse.py \
 - UIE_torch
 
 详情查看：[UIE MD](./UIE_torch/readme.md)
+
+#### sft指令数据生成
+对应目录：
+- self-instruct-zh
+实现功能：
+- 提供修改自我认知数据集和脚本
+- 编辑种子问题，配置生成问题的参数并运行，先生成`questions`
+- 再根据`questions`，生成对应的答案
+
+
+详情查看：[Self-Instruct MD](./UIE_torch/readme.md)
 
 ### 使用到的框架
 
