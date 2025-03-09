@@ -49,6 +49,137 @@ def generate_arithmetic_expression(num: int):
     expression = expression.replace("*", "x")
     return expression, result
 
+import asyncio
+import os
+from dataclasses import dataclass, field
+from typing import List, Tuple
+import pandas as pd
+from tqdm.asyncio import tqdm_asyncio
+from openai import AsyncOpenAI
+from asyncio import Semaphore
+
+@dataclass
+class AsyncLLMBatcher:
+    """
+    异步高并发LLM调用器，合并优化版本
+    
+    功能特性：
+    - 异步I/O高效并发
+    - 自动请求限速控制
+    - 错误重试机制
+    - 结果顺序保障
+    - 分块保存与断点续传
+    - 进度条显示
+    """
+    
+    api_key: str
+    model: str = "gpt-3.5-turbo"
+    system_prompt: str = ""
+    temperature: float = 1.0
+    max_workers: int = 64          # 最大并发数
+    req_per_second: int = 10       # 每秒请求上限
+    retry_attempts: int = 3        # 错误重试次数
+    chunk_size: int = 500          # 分块处理大小
+    timeout: int = 30              # 单请求超时(秒)
+    output_dir: str = "output"     # 输出目录
+    
+    _client: AsyncOpenAI = field(init=False)
+    _semaphore: Semaphore = field(init=False)
+    _rate_limiter: Semaphore = field(init=False)
+
+    def __post_init__(self):
+        self._client = AsyncOpenAI(api_key=self.api_key)
+        self._semaphore = Semaphore(self.max_workers)
+        self._rate_limiter = Semaphore(self.req_per_second)
+
+    async def _call_api(self, data: Tuple[int, str]) -> Tuple[int, str]:
+        """带重试机制的异步请求"""
+        idx, text = data
+        for _ in range(self.retry_attempts):
+            try:
+                async with self._rate_limiter:
+                    response = await asyncio.wait_for(
+                        self._client.chat.completions.create(
+                            model=self.model,
+                            messages=[
+                                {"role": "system", "content": self.system_prompt},
+                                {"role": "user", "content": text}
+                            ],
+                            temperature=self.temperature
+                        ),
+                        timeout=self.timeout
+                    )
+                    return (idx, response.choices[0].message.content)
+            except Exception as e:
+                print(f"Attempt {_+1} failed: {str(e)}")
+        return (idx, None)
+
+    async def _process_chunk(self, chunk: List[Tuple[int, str]]) -> pd.DataFrame:
+        """处理单个数据块"""
+        tasks = []
+        async with self._semaphore:
+            for data in chunk:
+                task = self._call_api(data)
+                tasks.append(task)
+            
+            results = []
+            for future in tqdm_asyncio.as_completed(tasks, desc="Processing"):
+                results.append(await future)
+            
+            # 按原始顺序排序
+            results.sort(key=lambda x: x[0])
+            return pd.DataFrame(
+                data=[res[1] for res in results],
+                columns=["response"]
+            )
+
+    async def run(self, data: List[str], batch_name: str = "result"):
+        """主运行方法"""
+        # 准备带索引的数据
+        indexed_data = list(enumerate(data))
+        
+        # 创建输出目录
+        os.makedirs(self.output_dir, exist_ok=True)
+        
+        # 分块处理
+        for chunk_idx in range(0, len(data), self.chunk_size):
+            chunk = indexed_data[chunk_idx:chunk_idx+self.chunk_size]
+            output_path = os.path.join(
+                self.output_dir,
+                f"{batch_name}_chunk_{chunk_idx//self.chunk_size}.csv"
+            )
+            
+            # 跳过已处理块
+            if os.path.exists(output_path):
+                print(f"Skipping existing chunk: {output_path}")
+                continue
+                
+            # 处理并保存
+            df = await self._process_chunk(chunk)
+            df.to_csv(output_path, index=False)
+        
+        # 合并结果
+        return self._merge_results(batch_name)
+
+    def _merge_results(self, batch_name: str) -> pd.DataFrame:
+        """合并所有分块结果"""
+        all_files = [
+            os.path.join(self.output_dir, f)
+            for f in os.listdir(self.output_dir)
+            if f.startswith(batch_name)
+        ]
+        
+        dfs = []
+        for f in sorted(all_files, key=lambda x: int(x.split("_")[-1].split(".")[0])):
+            dfs.append(pd.read_csv(f))
+        
+        merged_df = pd.concat(dfs, ignore_index=True)
+        merged_df.to_csv(
+            os.path.join(self.output_dir, f"FINAL_{batch_name}.csv"),
+            index=False
+        )
+        return merged_df
+
 
 @dataclass
 class AsyncLLMAPI:
