@@ -42,6 +42,7 @@
 ## 更新日志
 
 #### 📌 置顶
+* [2025.03.15] 🔍🔍🔍本项目利用文档加载、文本清理、异步LLM API调用和RAG技术，实现特定领域文档的高效[自动问答对生成]()，助力企业知识库与智能问答系统建设。✨,详情参考[Self-QA](./02-NLP_tasks/self-QA/README.md)
 * [2025.03.09] 🍒大模型异步协程调用LLM API优化：令牌池、进度条、异步协作的[案例](./02-NLP_tasks/self-instruct-zh/async_llm_api_batch_data.py)
 * [2025.03.04] 🍬基于self-instrut基本原理实现`domain_datasets`的自我扩充, 详情参考[self-intruct-zh.md](./02-NLP_tasks/self-instruct-zh/README.md)
 * [2025.02.20] 🌟🌟🌟基于`clip`和`qwen2.5`模型，基于`deepspeed-zero2`从零开始训练`llava`模型
@@ -76,3 +77,6 @@
 - [Transformers lessons-3](https://github.com/yuanzhoulvpi2017/zero_nlp)
 - [Huggingface Transformers](https://huggingface.co/docs/transformers/v4.27.2/zh/index)
 - [Pytorch]()
+---
+
+🎉 感谢您的关注与支持！如果有任何问题或建议，请随时提出！
