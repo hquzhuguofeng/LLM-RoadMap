@@ -42,6 +42,11 @@
 ## 更新日志
 
 #### 📌 置顶
+* [2025.10.17] ✨✨✨本项目新增三大核心模块，构建更智能的 AI 交互体系：
+    > **LangGraph 状态图对话引擎（0801-LangGraph_demo）**：基于有向图架构实现动态路由，支持并行工具调用与多轮推理。通过agent 分诊节点进行意图分析，检索类工具触发文档评分 - 重写机制（最多 3 次重试），非检索类工具直接生成回复，显著提升复杂对话流程的鲁棒性。<br>
+    > **ReAct 智能体后端服务（0802-ReActAgent_demo）**：基于 FastAPI 构建全功能 API，集成LangGraph ReAct 架构与多类型记忆管理（滑动窗口 / 摘要 / 检索式记忆），支持人工审查节点插入，可灵活部署于企业级 AI 应用。<br>
+    > **Milvus 向量搜索服务（0803-RagwithMilvus_demo）**：将 Milvus 封装为 MCP 协议 Server，通过标准化接口提供高并发向量检索（支持余弦相似度 / 欧式距离计算），显著提升 RAG 场景响应速度，已验证可支撑万级知识库的实时问答。
+    各模块均提供完整代码示例，欢迎体验最新功能！
 * [2025.03.15] 🔍🔍🔍本项目利用文档加载、文本清理、异步LLM API调用和RAG技术，实现特定领域文档的高效[自动问答对生成]()，助力企业知识库与智能问答系统建设。✨,详情参考[Self-QA](./02-NLP_tasks/self-QA/README.md)
 * [2025.03.09] 🍒大模型异步协程调用LLM API优化：令牌池、进度条、异步协作的[案例](./02-NLP_tasks/self-instruct-zh/async_llm_api_batch_data.py)
 * [2025.03.04] 🍬基于self-instrut基本原理实现`domain_datasets`的自我扩充, 详情参考[self-intruct-zh.md](./02-NLP_tasks/self-instruct-zh/README.md)
